@@ -3,26 +3,30 @@ package render
 import (
 	"bytes"
 	"fmt"
+	"github.com/ulugbek0217/template/pkg/config"
 	"html/template"
 	"log"
 	"net/http"
 	"path/filepath"
 )
 
+var templates *config.TemplatesConfig
+
+func SetTemplateConfig(templateSet *config.TemplatesConfig) {
+	templates = templateSet
+}
+
 // RenderTemplate renders template
 func RenderTemplate(w http.ResponseWriter, tmpl string) {
-	tc, err := CreateTemplateCache()
-	if err != nil {
-		log.Fatal(err)
-	}
+	tc := templates.TemplateCache
 	t, ok := tc[tmpl]
 	if !ok {
-		log.Fatal(err)
+		log.Fatal("Couldn't set template config")
 	}
 
 	buf := new(bytes.Buffer)
 
-	err = t.Execute(buf, nil)
+	err := t.Execute(buf, nil)
 	if err != nil {
 		log.Println(err)
 	}
