@@ -9,7 +9,7 @@ import (
 	"path/filepath"
 )
 
-// Renders template
+// RenderTemplate renders template
 func RenderTemplate(w http.ResponseWriter, tmpl string) {
 	tc, err := CreateTemplateCache()
 	if err != nil {
@@ -32,7 +32,7 @@ func RenderTemplate(w http.ResponseWriter, tmpl string) {
 	}
 }
 
-// Creates and returns template cache
+// CreateTemplateCache Creates and returns template cache
 func CreateTemplateCache() (map[string]*template.Template, error) {
 	functions := template.FuncMap{}
 	// place to store template sets
@@ -61,7 +61,7 @@ func CreateTemplateCache() (map[string]*template.Template, error) {
 		}
 		// check if at least a layout exists
 		if len(layouts) > 0 {
-			templateSet, err = template.ParseGlob("./templates/*.layout.tmpl")
+			templateSet, err = templateSet.ParseGlob("./templates/*.layout.tmpl")
 			if err != nil {
 				return pagesCache, err
 			}
