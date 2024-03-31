@@ -12,13 +12,21 @@ import (
 
 var templates *config.TemplatesConfig
 
+// SetTemplateConfig sets template cache to the templates variable
 func SetTemplateConfig(templateSet *config.TemplatesConfig) {
 	templates = templateSet
 }
 
 // RenderTemplate renders template
 func RenderTemplate(w http.ResponseWriter, tmpl string) {
-	tc := templates.TemplateCache
+	// check if the mode is real time editing or using cache
+	var tc map[string]*template.Template
+	if templates.UseCache {
+		tc = templates.TemplateCache
+	} else {
+		tc, _ = CreateTemplateCache()
+	}
+
 	t, ok := tc[tmpl]
 	if !ok {
 		log.Fatal("Couldn't set template config")
