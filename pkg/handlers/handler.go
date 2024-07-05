@@ -8,10 +8,12 @@ import (
 
 var Repo *Repository
 
+// Repository is the repository struct
 type Repository struct {
 	App *config.TemplatesConfig
 }
 
+// NewRepo creates a new repository
 func NewRepo(a *config.TemplatesConfig) *Repository {
 	return &Repository{
 		App: a,

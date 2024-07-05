@@ -2,7 +2,6 @@ package render
 
 import (
 	"bytes"
-	"fmt"
 	"github.com/ulugbek0217/template/pkg/config"
 	"html/template"
 	"log"
@@ -17,7 +16,7 @@ func SetTemplateConfig(templateSet *config.TemplatesConfig) {
 	templates = templateSet
 }
 
-// RenderTemplate renders template
+// RenderTemplate renders templates
 func RenderTemplate(w http.ResponseWriter, tmpl string) {
 	// check if the mode is real time editing or using cache
 	var tc map[string]*template.Template
@@ -29,7 +28,7 @@ func RenderTemplate(w http.ResponseWriter, tmpl string) {
 
 	t, ok := tc[tmpl]
 	if !ok {
-		log.Fatal("Couldn't set template config")
+		log.Fatal("Couldn't get template config")
 	}
 
 	buf := new(bytes.Buffer)
@@ -59,8 +58,6 @@ func CreateTemplateCache() (map[string]*template.Template, error) {
 	for _, page := range files {
 		// getting base name of a file
 		pageName := filepath.Base(page)
-
-		fmt.Println("Current page:", pageName)
 
 		templateSet, err := template.New(pageName).Funcs(functions).ParseFiles(page)
 		if err != nil {
