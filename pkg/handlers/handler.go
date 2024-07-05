@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"github.com/ulugbek0217/template/pkg/config"
+	"github.com/ulugbek0217/template/pkg/models"
 	"github.com/ulugbek0217/template/pkg/render"
 	"net/http"
 )
@@ -25,9 +26,12 @@ func NewHandlers(r *Repository) {
 }
 
 func (repo *Repository) Home(w http.ResponseWriter, r *http.Request) {
-	render.RenderTemplate(w, "home.page.tmpl")
+	stringMap := map[string]string{
+		"text": "This is from handler home",
+	}
+	render.RenderTemplate(w, "home.page.tmpl", &models.TemplateData{StringMap: stringMap})
 }
 
 func (repo *Repository) About(w http.ResponseWriter, r *http.Request) {
-	render.RenderTemplate(w, "about.page.tmpl")
+	render.RenderTemplate(w, "about.page.tmpl", &models.TemplateData{})
 }

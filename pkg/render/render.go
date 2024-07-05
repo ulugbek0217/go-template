@@ -3,6 +3,7 @@ package render
 import (
 	"bytes"
 	"github.com/ulugbek0217/template/pkg/config"
+	"github.com/ulugbek0217/template/pkg/models"
 	"html/template"
 	"log"
 	"net/http"
@@ -16,8 +17,15 @@ func SetTemplateConfig(templateSet *config.TemplatesConfig) {
 	templates = templateSet
 }
 
+func AddDefaultTD(td *models.TemplateData) *models.TemplateData {
+	td.IntMap = map[string]int{
+		"age": 18,
+	}
+	return td
+}
+
 // RenderTemplate renders templates
-func RenderTemplate(w http.ResponseWriter, tmpl string) {
+func RenderTemplate(w http.ResponseWriter, tmpl string, td *models.TemplateData) {
 	// check if the mode is real time editing or using cache
 	var tc map[string]*template.Template
 	if templates.UseCache {
@@ -32,8 +40,8 @@ func RenderTemplate(w http.ResponseWriter, tmpl string) {
 	}
 
 	buf := new(bytes.Buffer)
-
-	err := t.Execute(buf, nil)
+	td = AddDefaultTD(td)
+	err := t.Execute(buf, td)
 	if err != nil {
 		log.Println(err)
 	}
