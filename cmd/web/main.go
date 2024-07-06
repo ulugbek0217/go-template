@@ -12,25 +12,28 @@ import (
 const portNumber = ":8080"
 
 func main() {
-	var templateList config.TemplatesConfig
+	var app config.TemplatesConfig
 	var err error = nil
 
 	// create template cache
-	templateList.TemplateCache, err = render.CreateTemplateCache()
+	app.TemplateCache, err = render.CreateTemplateCache()
 	if err != nil {
 		log.Fatal("Couldn't create template cache")
 	}
 	// control the mode: real time or using caching system. true -> use caching, false -> real time editing
-	templateList.UseCache = false
+	app.UseCache = false
 
-	repo := handlers.NewRepo(&templateList)
+	repo := handlers.NewRepo(&app)
 	handlers.NewHandlers(repo)
 
-	render.SetTemplateConfig(&templateList)
-
-	http.HandleFunc("/", handlers.Repo.Home)
-	http.HandleFunc("/about", handlers.Repo.About)
+	render.SetTemplateConfig(&app)
 
 	fmt.Printf("Starting server on %s", portNumber)
-	_ = http.ListenAndServe(portNumber, nil)
+	server := &http.Server{
+		Addr:    portNumber,
+		Handler: routes(&app),
+	}
+	err = server.ListenAndServe()
+	log.Fatal(err)
+
 }
