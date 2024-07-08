@@ -15,8 +15,8 @@ func routes(app *config.TemplatesConfig) http.Handler {
 	//mux.Get("/about", http.HandlerFunc(handlers.Repo.About))
 	mux := chi.NewRouter()
 	mux.Use(middleware.Recoverer)
-	mux.Use(WriteToConsoleMiddleware)
-	mux.Use(CSRFTokenMiddleware)
+	mux.Use(NoSurf)
+	mux.Use(LoadSession)
 
 	mux.Get("/", handlers.Repo.Home)
 	mux.Get("/about", handlers.Repo.About)

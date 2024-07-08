@@ -10,6 +10,14 @@
             <div class="col">
                 <h1>This is the About page</h1>
                 <p>This is global data: {{index .IntMap "age"}}</p>
+
+                <p>
+                    {{if ne (index .StringMap "remote_ip") ""}}
+                        Your IP adress is {{index .StringMap "remote_ip"}}
+                    {{else}}
+                        I don't know you IP adress. Please visit <a href="/">Home page</a> so that I can know your IP adress
+                    {{end}}
+                </p>
             </div>
         </div>
     </div>

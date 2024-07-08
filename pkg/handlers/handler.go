@@ -29,9 +29,17 @@ func (repo *Repository) Home(w http.ResponseWriter, r *http.Request) {
 	stringMap := map[string]string{
 		"text": "This is from handler home",
 	}
+
+	remoteIP := r.RemoteAddr
+	repo.App.Session.Put(r.Context(), "remote_ip", remoteIP)
+
 	render.RenderTemplate(w, "home.page.tmpl", &models.TemplateData{StringMap: stringMap})
 }
 
 func (repo *Repository) About(w http.ResponseWriter, r *http.Request) {
-	render.RenderTemplate(w, "about.page.tmpl", &models.TemplateData{})
+	remoteAdress := repo.App.Session.GetString(r.Context(), "remote_ip")
+	stringMap := map[string]string{
+		"remote_ip": remoteAdress,
+	}
+	render.RenderTemplate(w, "about.page.tmpl", &models.TemplateData{StringMap: stringMap})
 }
